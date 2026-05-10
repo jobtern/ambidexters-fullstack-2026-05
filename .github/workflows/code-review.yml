@@ -21,7 +21,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify work environment
+      - name: Checkout Ops
+        uses: actions/checkout@v4
+        with:
+          repository: jobtern/jobtern-ops
+          token: ${{ secrets.JOBTERN_OPS_TOKEN }}
+          path: jobtern-ops
+
+      - name: Verify Work Environment
         run: node jobtern-ops/scripts/validate-commits.js
         env:
           GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -36,14 +43,14 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      - name: Checkout Base
+      - name: Checkout Ops
         uses: actions/checkout@v4
         with:
           repository: jobtern/jobtern-ops
           token: ${{ secrets.JOBTERN_OPS_TOKEN }}
           path: jobtern-ops
 
-      - name: Run code review
+      - name: Run Code Review
         run: node jobtern-ops/scripts/review.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
